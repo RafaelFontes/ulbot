@@ -8,7 +8,6 @@ export class VersionPlugin implements CommandHookInterface
         @inject(ConfigPlugin) private config: ConfigPlugin
     )
     {
-        
     }
 
     onCommand(args: string[]) : string

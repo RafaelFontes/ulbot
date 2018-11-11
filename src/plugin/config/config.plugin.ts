@@ -36,13 +36,10 @@ export class ConfigPlugin implements ConfigInterface
             this.resourceLoader.load('config.json').subscribe( configBuffer => {
                 
                 const config = JSON.parse(configBuffer.toString());
-
                 
                 this.discord = config.discord;
                 this.debugEnabled = config.debug;
                 this.version = config.version;
-
-                console.log(this.getVersion());
 
                 observer.next();
                 observer.complete();
