@@ -1,18 +1,17 @@
-import { ConfigInterface } from '@ul-plugin/interface';
+import { ConfigInterface, ResourceLoaderInterface } from '@ul-plugin/interface';
 import { injectable, inject } from 'inversify';
-import { ResourceLoader } from './resource-loader';
-import TYPES from './types';
+import TYPES from '../../types';
 import { Observable } from 'rxjs';
 
 @injectable()
-export class Config implements ConfigInterface
+export class ConfigPlugin implements ConfigInterface
 {
     discord: any;
 
     private debugEnabled: boolean;
 
     constructor(
-        @inject(TYPES.RESOURCE_LOADER) private resourceLoader: ResourceLoader
+        @inject(TYPES.RESOURCE_LOADER) private resourceLoader: ResourceLoaderInterface
     ) 
     {
     }
