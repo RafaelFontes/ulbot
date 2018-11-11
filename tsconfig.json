@@ -13,6 +13,7 @@
         "baseUrl": ".",
         "paths": {
             "@ul-plugin/*": [ "./src/plugin/*" ],
+            "@ul-types": [ "./src/types" ],
         }
     },
     "exclude": [
