@@ -1,7 +1,7 @@
-import { ConfigInterface, ResourceLoaderInterface } from '@ul-plugin/interface';
 import { injectable, inject } from 'inversify';
-import TYPES from '../../types';
 import { Observable } from 'rxjs';
+import { ResourceLoaderPlugin } from '../resource-loader/resource-loader';
+import { ConfigInterface } from '../interface';
 
 @injectable()
 export class ConfigPlugin implements ConfigInterface
@@ -9,15 +9,20 @@ export class ConfigPlugin implements ConfigInterface
     discord: any;
 
     private debugEnabled: boolean;
+    private version: string;
 
     constructor(
-        @inject(TYPES.RESOURCE_LOADER) private resourceLoader: ResourceLoaderInterface
+        @inject(ResourceLoaderPlugin) private resourceLoader: ResourceLoaderPlugin
     ) 
     {
     }
     
     getDiscordToken(): string {
         return this.discord.token;
+    }
+
+    getVersion(): string {
+        return this.version;
     }
 
     isDebugEnabled(): boolean
@@ -32,8 +37,12 @@ export class ConfigPlugin implements ConfigInterface
                 
                 const config = JSON.parse(configBuffer.toString());
 
+                
                 this.discord = config.discord;
                 this.debugEnabled = config.debug;
+                this.version = config.version;
+
+                console.log(this.getVersion());
 
                 observer.next();
                 observer.complete();

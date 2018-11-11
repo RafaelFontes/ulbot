@@ -2,5 +2,6 @@
     "discord" : {
         "token": ""
     },
-    "debug": true
+    "debug": true,
+    "version": "1.0"
 }
