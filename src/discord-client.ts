@@ -1,8 +1,8 @@
 import { injectable, inject } from 'inversify';
 import TYPES from './types';
-import { Config } from './config';
 import * as Discord from 'discord.js';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { LoggerInterface, ConfigInterface } from '@ul-plugin/interface';
 
 @injectable()
 export class DiscordClient {
@@ -12,7 +12,8 @@ export class DiscordClient {
     messages: BehaviorSubject<Discord.Message>;
 
     constructor(
-        @inject(TYPES.CONFIG_INTERFACE) private config: Config,
+        @inject(TYPES.CONFIG_INTERFACE) private config: ConfigInterface,
+        @inject(TYPES.LOGGER_INTERFACE) private logger: LoggerInterface,
     )
     {
         this.messages = new BehaviorSubject(null);
@@ -38,24 +39,12 @@ export class DiscordClient {
             console.log(`Logged in as ${this.connector.user.tag}!`);
         });
 
-        this.connector.on('message', msg => {
+        this.connector.on('message', message => {
             if (this.config.isDebugEnabled()) {
-                const debugStringArray = [];
-                
-                debugStringArray.push("<")
-                debugStringArray.push(new Date().toISOString().
-                replace(/T/, ' ').      
-                replace(/\..+/, ''))
-                debugStringArray.push("> ")
-                debugStringArray.push('[');
-                debugStringArray.push(msg.author.username);
-                debugStringArray.push('] ');
-                debugStringArray.push(msg.content);
-
-                console.log(debugStringArray.join(''));
+                this.logger.debugDiscordMessage(message);
             }
 
-            this.messages.next(msg);
+            this.messages.next(message);
         });
     }
 }

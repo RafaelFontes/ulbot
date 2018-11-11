@@ -26,7 +26,7 @@ export class Config implements ConfigInterface
         return this.debugEnabled;
     }
 
-    load()
+    load() : Observable<void>
     {
         return new Observable(observer => {
             this.resourceLoader.load('config.json').subscribe( configBuffer => {
