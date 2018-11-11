@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "lib": ["es6", "dom"],
+        "types": ["reflect-metadata", "node"],
+        "typeRoots": [
+            "./node_modules/@types"
+        ],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "baseUrl": ".",
+        "paths": {
+            "@ul-plugin/*": [ "./src/plugin/*" ],
+        }
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
