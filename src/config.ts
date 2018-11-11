@@ -9,6 +9,8 @@ export class Config implements ConfigInterface
 {
     discord: any;
 
+    private debugEnabled: boolean;
+
     constructor(
         @inject(TYPES.RESOURCE_LOADER) private resourceLoader: ResourceLoader
     ) 
@@ -19,12 +21,20 @@ export class Config implements ConfigInterface
         return this.discord.token;
     }
 
+    isDebugEnabled(): boolean
+    {
+        return this.debugEnabled;
+    }
+
     load()
     {
         return new Observable(observer => {
             this.resourceLoader.load('config.json').subscribe( configBuffer => {
+                
                 const config = JSON.parse(configBuffer.toString());
+
                 this.discord = config.discord;
+                this.debugEnabled = config.debug;
 
                 observer.next();
                 observer.complete();

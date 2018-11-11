@@ -2,16 +2,20 @@ import { injectable, inject } from 'inversify';
 import TYPES from './types';
 import { Config } from './config';
 import * as Discord from 'discord.js';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @injectable()
 export class DiscordClient {
 
     private connector: Discord.Client;
+    
+    messages: BehaviorSubject<Discord.Message>;
 
     constructor(
         @inject(TYPES.CONFIG_INTERFACE) private config: Config,
     )
     {
+        this.messages = new BehaviorSubject(null);
     }
 
     connect()
@@ -35,9 +39,23 @@ export class DiscordClient {
         });
 
         this.connector.on('message', msg => {
-            if (msg.content === 'ping') {
-                msg.reply('pong');
+            if (this.config.isDebugEnabled()) {
+                const debugStringArray = [];
+                
+                debugStringArray.push("<")
+                debugStringArray.push(new Date().toISOString().
+                replace(/T/, ' ').      
+                replace(/\..+/, ''))
+                debugStringArray.push("> ")
+                debugStringArray.push('[');
+                debugStringArray.push(msg.author.username);
+                debugStringArray.push('] ');
+                debugStringArray.push(msg.content);
+
+                console.log(debugStringArray.join(''));
             }
+
+            this.messages.next(msg);
         });
     }
 }
